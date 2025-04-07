@@ -7,13 +7,13 @@ void ofApp::setup(){
 
     const int NUM_PARTICLES = 200;
 
-    for(int i=0; i<NUM_PARTICLES; i++){
+    for(unsigned int i=0; i<NUM_PARTICLES; i++){
         Particle particle;
         particle.setup();
         particles.push_back(particle);
     }
 
-    for(int i=0; i<particles.size(); i++){
+    for(unsigned int i=0; i<particles.size(); i++){
         particles[i].setDebug(&debug);
         particles[i].setParticles(&particles);
     }
@@ -22,22 +22,22 @@ void ofApp::setup(){
 //--------------------------------------------------------------
 void ofApp::update(){
     // first set all of the particles updated to be false
-    for(int i=0; i<particles.size(); i++){
+    for(unsigned int i=0; i<particles.size(); i++){
         particles[i].updated = false;
     }
-    for(int i=0; i<particles.size(); i++){
+    for(unsigned int i=0; i<particles.size(); i++){
         particles[i].update();
     }
 
-    energy = 0;
-    for(int i=0; i<particles.size(); i++){
+    float energy = 0;
+    for(unsigned int i=0; i<particles.size(); i++){
         energy += particles[i].energy;
     }
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    for(int i=0; i<particles.size(); i++){
+    for(unsigned int i=0; i<particles.size(); i++){
         particles[i].draw();
     }
 
@@ -61,7 +61,7 @@ void Particle::setup(){
 
 //    radius = r;
     // we'll calculate it's mass as it's surface area
-    m = 2 * pi * pow(radius, 2);
+    m = 2 * M_PI * pow(radius, 2);
 
     // assign it's starting position
     p.x = ofRandom(radius, ofGetWidth() - radius);
@@ -116,7 +116,7 @@ void Particle::update(){
 
     // TODO think about what if they interact at a wall?
 
-    for(int i=0; i<particles->size(); i++){
+    for(unsigned int i=0; i<particles->size(); i++){
         // check that the particle isn't this particle
         // (is there a better way of doing this?)
         if (p.x == particles->at(i).p.x &&
@@ -140,8 +140,8 @@ void Particle::update(){
             float radius1 = radius;
             float radius2 = particle2->radius;
             // inertia
-            float i1 = (pi/2)*pow(radius1, 4);
-            float i2 = (pi/2)*pow(radius2, 4);
+            float i1 = (M_PI/2)*pow(radius1, 4);
+            float i2 = (M_PI/2)*pow(radius2, 4);
             // velocity
             ofVec2f v1 = v;
             ofVec2f v2 = particle2->v;
@@ -191,8 +191,7 @@ void Particle::update(){
             particles->at(i).w = w2f;
 
             particles->at(i).p += particles->at(i).v;
-            updated = true;
-            particles->at(i).updated =
+            particles->at(i).updated = true;
         }
     }
     // update the position using the particles velocity
@@ -225,7 +224,7 @@ void Particle::setParticles(vector<Particle> *p){
 // smaller than the two particles radii combined.
 bool Particle::isInteracting(Particle * particle){
     // calculate the distance between two particles
-    float d = pos.distance(particle->pos);
+    float d = p.distance(particle->p);
 
     if (d < radius + particle->radius){
         return true;

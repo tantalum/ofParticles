@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
+#include <math.h>
 
 // Represents a particle in 2d space
 class Particle : public ofBaseApp {
