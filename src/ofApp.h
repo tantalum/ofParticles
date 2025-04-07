@@ -4,13 +4,12 @@
 #include <math.h>
 
 // Represents a particle in 2d space
-class Particle : public ofBaseApp {
+class Particle {
 public:
     void setup();
     void update();
     void draw();
 
-    void setDebug(bool* debug);
     void setParticles(vector<Particle>* particles);
     bool isInteracting(Particle * particle);
     void updateParticles(Particle * particle2);
@@ -23,8 +22,6 @@ public:
     float radius;
 
     bool updated; // has this particle been updated
-    float energy; // useful for ensuring the physics checks out
-    bool * debug; // pointer to apps debug flag
 
     vector<Particle>* particles; // pointer to other particles
 };
@@ -34,10 +31,7 @@ public:
     void setup();
     void update();
     void draw();
-    void keyPressed(int key);
 
-    bool debug; // used for displaying debug information
-    float energy; // useful to ensuring the physics checks out
     vector<Particle> particles; // map of all the particles
 };
 

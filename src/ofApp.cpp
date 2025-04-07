@@ -1,6 +1,9 @@
 #include "ofApp.h"
 
 //--------------------------------------------------------------
+// ofApp Implementation
+//--------------------------------------------------------------
+
 void ofApp::setup(){
     // set the background to black for max contrast
     ofBackground(0);
@@ -14,7 +17,6 @@ void ofApp::setup(){
     }
 
     for(unsigned int i=0; i<particles.size(); i++){
-        particles[i].setDebug(&debug);
         particles[i].setParticles(&particles);
     }
 }
@@ -28,11 +30,6 @@ void ofApp::update(){
     for(unsigned int i=0; i<particles.size(); i++){
         particles[i].update();
     }
-
-    float energy = 0;
-    for(unsigned int i=0; i<particles.size(); i++){
-        energy += particles[i].energy;
-    }
 }
 
 //--------------------------------------------------------------
@@ -40,17 +37,11 @@ void ofApp::draw(){
     for(unsigned int i=0; i<particles.size(); i++){
         particles[i].draw();
     }
-
-    ofSetColor(255);
-    ofDrawBitmapString("Total energy: " + to_string(energy), 10, 10);
 }
 
-void ofApp::keyPressed(int key){
-    switch (key){
-    case 100: // d
-        debug = !debug;
-    }
-}
+//--------------------------------------------------------------
+// Particle Implementation
+//--------------------------------------------------------------
 
 // set up a particle
 void Particle::setup(){
@@ -59,7 +50,6 @@ void Particle::setup(){
     // the ignore the actual radius except for visualising
     radius = ofRandom(5, 10);
 
-//    radius = r;
     // we'll calculate it's mass as it's surface area
     m = 2 * M_PI * pow(radius, 2);
 
@@ -75,12 +65,13 @@ void Particle::setup(){
     w.x = ofRandom(-0.5, 0.5);
     w.y = ofRandom(-0.5, 0.5);
 
-    // give it a randomised colour
-    colour.r = ofRandom(0, 255);
-    colour.g = ofRandom(0, 255);
-    colour.b = ofRandom(0, 255);
+    // give it a color that reflect it's properties
+    colour.r = ofRandom(0, radius*(255/10));
+    colour.g = ofRandom(0, (v.x+3)*(255/6));
+    colour.b = ofRandom(0, (w.x+0.5)*255);
 }
 
+//--------------------------------------------------------------
 // particles bounce off the edges of the container with no forces
 void Particle::update(){
 
@@ -96,10 +87,9 @@ void Particle::update(){
     // position with one edge at a time. Each time an edge
     // is reached the velocity
 
-    ofVec2f reverseX(-1, 1);
-    ofVec2f reverseY(1, -1);
+    const ofVec2f reverseX(-1, 1);
+    const ofVec2f reverseY(1, -1);
 
-    // right
     if (p.x > maxX || p.x < minX){
         v *= reverseX;
     }
@@ -196,28 +186,22 @@ void Particle::update(){
     }
     // update the position using the particles velocity
     p += v;
-    energy = 0.5 * m * pow(v.length(), 2);
 }
 
+//--------------------------------------------------------------
 // draw the particle (the easy bit!)
 void Particle::draw(){
     ofSetColor(colour);
     ofDrawCircle(p.x, p.y, radius);
-    // write debug information
-    if (*debug){
-        ofDrawBitmapString(energy, p.x + radius, p.y + radius);
-    }}
-
-// debug is a variable at ofApp level. Perhaps look at extending
-// particle class to be of ofBaseApp also?that'
-void Particle::setDebug(bool * d){
-    debug = d;
 }
 
+
+//--------------------------------------------------------------
 void Particle::setParticles(vector<Particle> *p){
     particles = p;
 }
 
+//--------------------------------------------------------------
 // in order to tell if a particle interacts with another one
 // their areas must be overlapping. The simplest way to calculate
 // this is to see if the distance between the two points is
