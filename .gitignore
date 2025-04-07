@@ -2,6 +2,7 @@
 # general
 #########################
 
+bin/
 [Bb]uild/
 [Oo]bj/
 *.o
@@ -67,6 +68,9 @@ ipch/
 [Dd]ebug*/
 [Rr]elease*/
 Ankh.NoLoad
+
+#QT Creator
+.qtcreator/
 
 #########################
 # PROJECT
