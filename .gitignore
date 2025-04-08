@@ -77,3 +77,5 @@ Ankh.NoLoad
 #########################
 settings*
 tags
+*.plist
+compile_commands.json
