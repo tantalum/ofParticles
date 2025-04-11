@@ -1,5 +1,7 @@
 #include "ofMain.h"
 
+const int NUM_PARTICLES = 200;
+
 // Represents a particle in 2d space
 class Particle {
 public:

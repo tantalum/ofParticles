@@ -9,6 +9,10 @@ public:
     void update();
     void draw();
 
+private:
     vector<Particle> particles; // map of all the particles
+    ofVideoGrabber videoGrabber;
+    int camWidth;
+    int camHeight;
 };
 
