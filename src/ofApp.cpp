@@ -5,24 +5,7 @@
 //--------------------------------------------------------------
 
 void ofApp::setup(){
-    camWidth = 640;
-    camHeight = 480;
-
-    // Initialize the Camera Device
-    vector<ofVideoDevice> devices = videoGrabber.listDevices();
-    for(size_t i = 0; i < devices.size(); i++) {
-        ofVideoDevice device = devices[i];
-        if(device.bAvailable) {
-            ofLogNotice() << device.id << ": " << device.deviceName << " - Available";
-        } else {
-            ofLogNotice() << device.id << ": " << device.deviceName << " - Unavailanle";
-        }
-    }
-    videoGrabber.setDeviceID(0);
-    videoGrabber.setDesiredFrameRate(30);
-    videoGrabber.setup(camWidth, camHeight);
-
-    ofSetVerticalSync(true);
+    motionDetector.setup();
 
     // set the background to black for max contrast
     ofBackground(0);
@@ -41,8 +24,8 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    videoGrabber.update();
-
+    motionDetector.update();
+    
     // first set all of the particles updated to be false
     for(unsigned int i=0; i<particles.size(); i++){
         particles[i].updated = false;
@@ -54,8 +37,7 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    ofSetHexColor(0x444444);
-    videoGrabber.draw(20, 20, ofGetWidth(), ofGetHeight());
+    motionDetector.draw();
     for(unsigned int i=0; i<particles.size(); i++){
         particles[i].draw();
     }

@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "Particle.h"
+#include "MotionDetector.h"
 
 class ofApp : public ofBaseApp{
 public:
@@ -11,8 +12,6 @@ public:
 
 private:
     vector<Particle> particles; // map of all the particles
-    ofVideoGrabber videoGrabber;
-    int camWidth;
-    int camHeight;
+    MotionDetector motionDetector;
 };
 
